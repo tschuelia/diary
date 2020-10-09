@@ -1,0 +1,16 @@
+{% extends "diary/base.html" %} 
+{% block content %}
+<div>
+  <form method="POST">
+    {% csrf_token %}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Eintrag löschen</legend>
+      <h4>Bist du sicher das du den Eintrag <i>{{ entry.title }}</i> löschen möchtest?</h4>
+    </fieldset>
+    <div class="form-group">
+      <button class="btn btn-outline-danger" type="submit">Ja, löschen</button>
+      <a class="btn btn-outline-secondary" href="{% url 'diary-detail' entry.diary.pk %}">Abbrechen</a>
+    </div>
+  </form>
+</div>
+{% endblock content %}

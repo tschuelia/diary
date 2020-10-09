@@ -5,6 +5,10 @@
 
 .vscode/*
 
+# Django #
+*.log
+*.pot
+*.pyc
 # Icon must end with two \r
 Icon
 
@@ -134,6 +138,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+diary-env/
 .env
 .venv
 env/

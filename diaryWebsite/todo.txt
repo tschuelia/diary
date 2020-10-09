@@ -1,0 +1,3 @@
+- user permissions:
+    - update/add nur für owner
+    - view mit django view permission groups

@@ -1,0 +1,30 @@
+{% extends "diary/base.html" %}
+{% load markdown_deux_tags %}
+{% block content %}
+<div class="row my-4">
+    <h1 class="text-truncate d-inline">{{ entry.title }}</h1>
+    <div class="ml-auto">
+        {% if entry.diary.owner == user%}
+        <!-- Allow update and delete -->
+        <a href="{% url 'update-entry' diary_pk=entry.diary.pk entry_pk=entry.pk %}" class="btn text-dark"><i
+                class="fas fa-edit"></i></a>
+        <a href="{% url 'delete-entry' diary_pk=entry.diary.pk entry_pk=entry.pk %}" class="btn text-danger"><i
+                class="fas fa-trash"></i></a>
+        {% endif %}
+    </div>
+</div>
+<p>
+    {{ entry.start_date }} {% if entry.end_date %} - {{ entry.end_date }}{% endif %}
+</p>
+<!-- Map -->
+{% include "diary/map.html" with diary_location="" locations=entry_location%}
+<br>
+<!-- Pictures -->
+<a href="{% url 'add-images' diary_pk=entry.diary.pk entry_pk=entry.pk %}" class="btn btn-dark">Add images</a>
+<div>
+    {% include "diary/entry_images.html" %}
+</div>
+<div>
+    {{ entry.description|markdown }}
+</div>
+{% endblock content %}

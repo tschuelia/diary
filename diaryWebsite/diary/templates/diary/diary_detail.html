@@ -1,0 +1,43 @@
+{% extends 'diary/base.html' %}
+{% load markdown_deux_tags %}
+{% block content %}
+<div class="row my-4 mx-2">
+    <h1 class="text-truncate d-inline">{{ diary.title }}</h1>
+    <div class="ml-auto">
+        {% if user.is_authenticated %}
+        <!-- Allow update and delete -->
+        <a href="{% url 'diary-update' diary.pk %}" class="btn text-dark"><i class="fas fa-edit"></i></a>
+        <a href="{% url 'diary-delete' diary.pk %}" class="btn text-danger"><i class="fas fa-trash"></i></a>
+        {% endif %}
+    </div>
+</div>
+
+<ul>
+    <li>{{ diary.start_date }} - {{ diary.end_date }}</li>
+    <li>Ort {{ diary.location_alias }}</li>
+</ul>
+<p>{{ diary.summary|markdown }}</p>
+
+{% include "diary/map.html" with diary_location=diary_location locations=locations %}
+<br>
+<a href={% url 'add-entry' diary.pk %} class="btn btn-dark text-light">Eintrag hinzufügen</a>
+<br>
+<div class="card-deck">
+    {% for entry in entries %}
+    <div class="card bg-light">
+        <div class="card-header">
+            <div class="row mx-1">
+                <h2 class="card-title">
+                    <a
+                        href="{% url 'entry-detail' diary_pk=entry.diary.pk entry_pk=entry.pk %}">{{ entry.title }}</i></a>
+            </div>
+            <div>{{ entry.start_date }} {% if entry.end_date %} - {{ entry.end_date }}{% endif %}</div>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ entry.summary|markdown }}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock content %}

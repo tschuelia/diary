@@ -1,0 +1,20 @@
+{% extends 'diary/base.html' %}
+{% load markdown_deux_tags %}
+{% block content %}
+<div class="card-deck">
+  {% for diary in diaries %}
+
+  <div class="card">
+    <img src="#" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title"><a href={% url 'diary-detail' diary.pk %}>{{ diary.title }}</a></h5>
+      <p class="card-text">{{ diary.summary|markdown }}</p>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">Last updated 3 mins ago</small>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+{% endblock content %}

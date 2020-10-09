@@ -1,0 +1,10 @@
+{% load static %}
+<!--The div element for the map -->
+<div class="map" id="map"></div>
+  {{ diary_location|json_script:"diary_loc" }}
+  {{ locations|json_script:"locations" }}
+</div>
+<script type="text/javascript" src="{% static 'diary/js/map.js' %}"></script>
+<script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArMkJ2KdGb1adWocJII7vA-5DaApX3Ics&callback=initMap">
+</script>
