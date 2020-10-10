@@ -29,4 +29,9 @@ urlpatterns = [
         views.add_images_to_entry,
         name="add-images",
     ),
+    path(
+        "diary/<int:diary_pk>/entry/<int:entry_pk>/gallery",
+        views.image_gallery,
+        name="image-gallery",
+    ),
 ]

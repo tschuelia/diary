@@ -13,18 +13,35 @@
         {% endif %}
     </div>
 </div>
+<hr>
 <p>
-    {{ entry.start_date }} {% if entry.end_date %} - {{ entry.end_date }}{% endif %}
+    <i class="far fa-calendar-alt"></i> {{ entry.start_date }} {% if entry.end_date %} -
+    {{ entry.end_date }}{% endif %}
 </p>
 <!-- Map -->
 {% include "diary/map.html" with diary_location="" locations=entry_location%}
 <br>
-<!-- Pictures -->
-<a href="{% url 'add-images' diary_pk=entry.diary.pk entry_pk=entry.pk %}" class="btn btn-dark">Add images</a>
-<div>
-    {% include "diary/entry_images.html" %}
-</div>
+<hr>
+<!-- Descritption -->
 <div>
     {{ entry.description|markdown }}
 </div>
+<hr>
+<!-- Pictures -->
+<div class="row my-4">
+    <h3 class="text-truncate d-inline">Bilder</h3>
+    <div class="ml-auto">
+        {% if entry.diary.owner == user%}
+        <!-- Allow adding images -->
+        <a href="{% url 'add-images' diary_pk=entry.diary.pk entry_pk=entry.pk %}" class="btn btn-outline-dark">Bilder<i
+                class="col-2 fas fa-plus"></i></a>
+        {% endif %}
+    </div>
+</div>
+<a href="{% url 'image-gallery' diary_pk=entry.diary.pk entry_pk=entry.pk %}" class="btn btn-outline-dark">Galerie <i
+        class="far fa-images"></i></a>
+<div>
+    {% include "diary/entry_images.html" %}
+</div>
+
 {% endblock content %}

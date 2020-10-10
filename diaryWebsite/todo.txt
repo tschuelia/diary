@@ -1,3 +1,5 @@
 - user permissions:
     - update/add nur für owner
     - view mit django view permission groups
+- api key aus settings rauswerfen und in settings_prod -> nicht ins repo!
+- api key automatisch holen in map.html

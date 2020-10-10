@@ -132,3 +132,12 @@ def add_images_to_entry(request, diary_pk, entry_pk):
             return render(request, "diary/entry_images_form.html", {"formset": formset})
         formset.save()
         return redirect("entry-detail", diary_pk=diary_pk, entry_pk=entry_pk)
+
+
+@login_required
+def image_gallery(request, diary_pk, entry_pk):
+    entry = get_object_or_404(Entry, pk=entry_pk)
+    images = entry.get_images()
+    return render(
+        request, "diary/image_gallery.html", {"entry": entry, "images": images}
+    )
