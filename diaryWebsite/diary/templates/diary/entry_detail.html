@@ -2,6 +2,17 @@
 {% load markdown_deux_tags %}
 {% block content %}
 <div class="row my-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light">
+            <li class="breadcrumb-item"><a class="text-dark" href="{% url 'diaries-overview' %}">Übersicht</a></li>
+            <li class="breadcrumb-item"><a class="text-dark" href="{% url 'diary-detail' pk=entry.diary.pk %}">{{ entry.diary.title }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ entry.title }}</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row my-4">
     <h1 class="text-truncate d-inline">{{ entry.title }}</h1>
     <div class="ml-auto">
         {% if entry.diary.owner == user%}
@@ -15,7 +26,7 @@
 </div>
 <hr>
 <p>
-    <i class="far fa-calendar-alt"></i> {{ entry.start_date }} {% if entry.end_date %} -
+    <i class="far fa-calendar-alt"></i> {{ entry.start_date }} {% if entry.end_date %} –
     {{ entry.end_date }}{% endif %}
 </p>
 <!-- Map -->
@@ -33,13 +44,11 @@
     <div class="ml-auto">
         {% if entry.diary.owner == user%}
         <!-- Allow adding images -->
-        <a href="{% url 'add-images' diary_pk=entry.diary.pk entry_pk=entry.pk %}" class="btn btn-outline-dark">Bilder<i
-                class="col-2 fas fa-plus"></i></a>
+        <a href="{% url 'add-images' diary_pk=entry.diary.pk entry_pk=entry.pk %}" class="btn"><i
+                class="col-2 fas fa-edit"></i><i class="col-2 fas fa-plus"></i></a>
         {% endif %}
     </div>
 </div>
-<a href="{% url 'image-gallery' diary_pk=entry.diary.pk entry_pk=entry.pk %}" class="btn btn-outline-dark">Galerie <i
-        class="far fa-images"></i></a>
 <div>
     {% include "diary/entry_images.html" %}
 </div>

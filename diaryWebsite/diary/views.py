@@ -11,13 +11,20 @@ from .forms import EntryForm, ImageFormSet
 @login_required
 def diaries_overview(request):
     diaries = Diary.objects.all()
-    return render(request, "diary/diaries_overview.html", {"diaries": diaries})
+    diaries_and_images = [(d, d.get_images().order_by("?").first()) for d in diaries]
+    print("dadsf", diaries_and_images)
+    return render(
+        request,
+        "diary/diaries_overview.html",
+        {"diaries_and_images": diaries_and_images},
+    )
 
 
 @login_required
 def diary_detail(request, pk):
     diary = get_object_or_404(Diary, pk=pk)
     entries = diary.get_entries()
+    entries_and_images = [(e, e.get_images().order_by("?").first()) for e in entries]
     locations = [(entry.location.x, entry.location.y) for entry in entries]
     return render(
         request,
@@ -25,9 +32,21 @@ def diary_detail(request, pk):
         {
             "diary": diary,
             "diary_location": (diary.location.x, diary.location.y),
-            "entries": entries,
+            "entries_and_images": entries_and_images,
             "locations": locations,
         },
+    )
+
+
+@login_required
+def diary_gallery(request, pk):
+    diary = get_object_or_404(Diary, pk=pk)
+    entries = diary.get_entries()
+    entries_and_images = [(e, e.get_images()) for e in entries]
+    return render(
+        request,
+        "diary/diary_gallery.html",
+        {"diary": diary, "entries_and_images": entries_and_images},
     )
 
 
@@ -132,12 +151,3 @@ def add_images_to_entry(request, diary_pk, entry_pk):
             return render(request, "diary/entry_images_form.html", {"formset": formset})
         formset.save()
         return redirect("entry-detail", diary_pk=diary_pk, entry_pk=entry_pk)
-
-
-@login_required
-def image_gallery(request, diary_pk, entry_pk):
-    entry = get_object_or_404(Entry, pk=entry_pk)
-    images = entry.get_images()
-    return render(
-        request, "diary/image_gallery.html", {"entry": entry, "images": images}
-    )

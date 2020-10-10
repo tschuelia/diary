@@ -3,3 +3,10 @@
     - view mit django view permission groups
 - api key aus settings rauswerfen und in settings_prod -> nicht ins repo!
 - api key automatisch holen in map.html
+
+- Kartenpunkte annotieren mit entry.title
+- Mapansicht mit allen Tagebüchern (+Entries?)
+- Ansicht "meine Tagebücher"
+- Ansicht "Tagebücher die mit mir geteilt wurden aber nicht von mir sind"
+
+- Login/Logout

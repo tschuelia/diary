@@ -1,43 +1,64 @@
 {% extends 'diary/base.html' %}
 {% load markdown_deux_tags %}
 {% block content %}
-<div class="row my-4 mx-2">
+<div class="row">
     <h1 class="text-truncate d-inline">{{ diary.title }}</h1>
     <div class="ml-auto">
-        {% if user.is_authenticated %}
+        {% if diary.owner == user%}
         <!-- Allow update and delete -->
         <a href="{% url 'diary-update' diary.pk %}" class="btn text-dark"><i class="fas fa-edit"></i></a>
         <a href="{% url 'diary-delete' diary.pk %}" class="btn text-danger"><i class="fas fa-trash"></i></a>
         {% endif %}
     </div>
 </div>
-
-<ul>
-    <li>{{ diary.start_date }} - {{ diary.end_date }}</li>
-    <li>Ort {{ diary.location_alias }}</li>
-</ul>
+<hr>
 <p>{{ diary.summary|markdown }}</p>
+<hr>
+<p>
+    <i class="far fa-calendar-alt"></i> {{ diary.start_date }} {% if diary.end_date %} –
+    {{ diary.end_date }}{% endif %}
+</p>
+<p>
+    <i class="fas fa-map-marked-alt"></i> {{ diary.location_alias }}
+</p>
+<p>
+    <a href="{% url 'diary-gallery' diary.pk %}" class="text-secondary"><i class="far fa-images"></i> zur
+        Bildergalerie </a>
+</p>
+<hr>
 
 {% include "diary/map.html" with diary_location=diary_location locations=locations %}
+<hr>
+<div class="row my-4 mx-2">
+    <h3 class="text-truncate d-inline">Einträge</h3>
+    <div class="ml-auto">
+        {% if diary.owner == user%}
+        <!-- Allow adding entries -->
+        <a href={% url 'add-entry' diary.pk %} class="btn btn-outline-dark"><i class="fas fa-plus"></i>
+            Neu</a>
+        {% endif %}
+    </div>
+</div>
 <br>
-<a href={% url 'add-entry' diary.pk %} class="btn btn-dark text-light">Eintrag hinzufügen</a>
-<br>
-<div class="card-deck">
-    {% for entry in entries %}
-    <div class="card bg-light">
-        <div class="card-header">
-            <div class="row mx-1">
-                <h2 class="card-title">
-                    <a
-                        href="{% url 'entry-detail' diary_pk=entry.diary.pk entry_pk=entry.pk %}">{{ entry.title }}</i></a>
-            </div>
-            <div>{{ entry.start_date }} {% if entry.end_date %} - {{ entry.end_date }}{% endif %}</div>
-        </div>
+<div class="card-columns">
+    {% for entry, image in entries_and_images %}
+    <div class="card">
+        {% if image %}
+        <img src="{{ image.get_url }}" class="card-img-top" alt="...">
+        {% endif %}
         <div class="card-body">
+            <h5 class="card-title"><a class="text-dark"
+                    href="{% url 'entry-detail' diary_pk=entry.diary.pk entry_pk=entry.pk %}">{{ entry.title }}</a></h5>
             <p class="card-text">{{ entry.summary|markdown }}</p>
+        </div>
+        <div class="card-footer">
+            <small>
+                <i class="far fa-calendar-alt"></i> {{ entry.start_date }} {% if entry.end_date %} –
+                {{ entry.end_date }}{% endif %}
+            </small>
+            <br>
         </div>
     </div>
     {% endfor %}
-
 </div>
 {% endblock content %}

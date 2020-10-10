@@ -25,6 +25,10 @@ class Diary(models.Model):
     def get_entries(self):
         return self.entry_of.all().order_by("start_date")
 
+    def get_images(self):
+        entry_pks = [e.pk for e in self.get_entries()]
+        return Image.objects.filter(entry__in=entry_pks)
+
 
 class Entry(models.Model):
     diary = models.ForeignKey(
@@ -40,13 +44,22 @@ class Entry(models.Model):
     summary = models.TextField(blank=True, verbose_name="Zusammenfassung")
     description = models.TextField(verbose_name="Beschreibung")
 
+    def __str__(self):
+        return self.title
+
     def get_images(self):
         return self.image_of.all().order_by("date")
 
 
 class Image(models.Model):
+    width = models.IntegerField()
+    height = models.IntegerField()
     image = models.ImageField(
-        default="default.jpg", upload_to="entry_pics", verbose_name="Bilder"
+        width_field="width",
+        height_field="height",
+        default="default.jpg",
+        upload_to="entry_pics",
+        verbose_name="Bilder",
     )
     entry = models.ForeignKey(
         Entry, related_name="image_of", on_delete=models.CASCADE, null=True

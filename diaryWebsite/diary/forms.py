@@ -49,17 +49,18 @@ class ImageForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         image_obj = super().save(commit=False)
-        image = PIL.Image.open(image_obj.image)
-        exif = {
-            PIL.ExifTags.TAGS[k]: v
-            for k, v in image._getexif().items()
-            if k in PIL.ExifTags.TAGS
-        }
-        if "DateTimeOriginal" in exif.keys():
-            dtorig = exif["DateTimeOriginal"]
-            # DateTimeOriginal is of format "2019:01:11 11:08:47"
-            image_obj.date = datetime.strptime(dtorig, "%Y:%m:%d %H:%M:%S")
-        # TODO: process geolocation information
+        if "image" in self.changed_data:
+            image = PIL.Image.open(image_obj.image)
+            exif = {
+                PIL.ExifTags.TAGS[k]: v
+                for k, v in image._getexif().items()
+                if k in PIL.ExifTags.TAGS
+            }
+            if "DateTimeOriginal" in exif.keys():
+                dtorig = exif["DateTimeOriginal"]
+                # DateTimeOriginal is of format "2019:01:11 11:08:47"
+                image_obj.date = datetime.strptime(dtorig, "%Y:%m:%d %H:%M:%S")
+            # TODO: process geolocation information
 
         image_obj.save()
         return image_obj

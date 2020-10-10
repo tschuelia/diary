@@ -1,20 +1,27 @@
 {% extends 'diary/base.html' %}
 {% load markdown_deux_tags %}
 {% block content %}
-<div class="card-deck">
-  {% for diary in diaries %}
-
+<div class="card-columns">
+  {% for diary, image in diaries_and_images %}
   <div class="card">
-    <img src="#" class="card-img-top" alt="...">
+    {% if image %}
+    <img src="{{ image.get_url }}" class="card-img-top" alt="...">
+    {% endif %}
     <div class="card-body">
-      <h5 class="card-title"><a href={% url 'diary-detail' diary.pk %}>{{ diary.title }}</a></h5>
+      <h5 class="card-title"><a class="text-dark" href={% url 'diary-detail' diary.pk %}>{{ diary.title }}</a></h5>
       <p class="card-text">{{ diary.summary|markdown }}</p>
     </div>
     <div class="card-footer">
-      <small class="text-muted">Last updated 3 mins ago</small>
+      <small>
+        <i class="far fa-calendar-alt"></i> {{ diary.start_date }} {% if diary.end_date %} –
+        {{ diary.end_date }}{% endif %}
+      </small>
+      <br>
+      <small>
+        <i class="fas fa-map-marked-alt"></i> {{ diary.location_alias }}
+      </small>
     </div>
   </div>
   {% endfor %}
-
 </div>
 {% endblock content %}

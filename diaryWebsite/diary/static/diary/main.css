@@ -3,9 +3,3 @@
     height: 400px;
     background-color: grey;
 }
-
-.carousel-inner .image-description {
-    position: relative;
-    left: 0;
-    top: 0;
-}

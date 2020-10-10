@@ -9,6 +9,7 @@ urlpatterns = [
     path("diary/<int:pk>/update", views.diary_update, name="diary-update"),
     path("diary/<int:pk>/delete", DiaryDeleteView.as_view(), name="diary-delete"),
     path("diary/<int:pk>/addEntry", views.add_entry, name="add-entry"),
+    path("diary/<int:pk>/gallery", views.diary_gallery, name="diary-gallery"),
     path(
         "diary/<int:diary_pk>/entry/<int:entry_pk>",
         views.entry_detail,
@@ -28,10 +29,5 @@ urlpatterns = [
         "diary/<int:diary_pk>/entry/<int:entry_pk>/addimages",
         views.add_images_to_entry,
         name="add-images",
-    ),
-    path(
-        "diary/<int:diary_pk>/entry/<int:entry_pk>/gallery",
-        views.image_gallery,
-        name="image-gallery",
     ),
 ]
