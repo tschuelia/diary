@@ -1,5 +1,9 @@
 # ignore media folder
 diaryWebsite/media/*
+
+# don't track changes in settings.py -> ensure that API Key stays secret
+diaryWebsite/diaryWebsite/settings.py
+
 ### OSX ###
 .DS_Store
 .AppleDouble
@@ -166,3 +170,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
