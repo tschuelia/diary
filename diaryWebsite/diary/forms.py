@@ -1,11 +1,11 @@
 from django import forms
 from django.forms import inlineformset_factory
 
+from bootstrap_datepicker_plus import DateTimePickerInput
 from pagedown.widgets import AdminPagedownWidget, PagedownWidget
 from mapwidgets.widgets import GooglePointFieldWidget
 
 from .models import Diary, Entry, Image
-
 
 import PIL
 import PIL.ExifTags
@@ -13,13 +13,15 @@ from datetime import datetime
 
 
 class DiaryForm(forms.ModelForm):
-    summary = forms.CharField(widget=AdminPagedownWidget())
+    summary = forms.CharField(widget=PagedownWidget())
 
     class Meta:
         model = Diary
-        fields = "__all__"
+        exclude = ("owner",)
         widgets = {
             "location": GooglePointFieldWidget,
+            "start_date": DateTimePickerInput(format="%Y-%m-%d"),
+            "end_date": DateTimePickerInput(format="%Y-%m-%d"),
         }
 
 
@@ -39,6 +41,8 @@ class EntryForm(forms.ModelForm):
         ]
         widgets = {
             "location": GooglePointFieldWidget,
+            "start_date": DateTimePickerInput(format="%Y-%m-%d"),
+            "end_date": DateTimePickerInput(format="%Y-%m-%d"),
         }
 
 
