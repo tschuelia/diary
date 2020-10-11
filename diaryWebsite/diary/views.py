@@ -7,12 +7,13 @@ from django.views.generic import DeleteView
 from .models import Diary, Entry
 from .forms import EntryForm, ImageFormSet
 
+from django.conf import settings
+
 
 @login_required
 def diaries_overview(request):
     diaries = Diary.objects.all()
     diaries_and_images = [(d, d.get_images().order_by("?").first()) for d in diaries]
-    print("dadsf", diaries_and_images)
     return render(
         request,
         "diary/diaries_overview.html",
@@ -34,6 +35,7 @@ def diary_detail(request, pk):
             "diary_location": (diary.location.x, diary.location.y),
             "entries_and_images": entries_and_images,
             "locations": locations,
+            "GOOGLE_MAP_API_KEY": settings.GOOGLE_MAP_API_KEY,
         },
     )
 
@@ -80,6 +82,7 @@ def entry_detail(request, diary_pk, entry_pk):
             "entry": entry,
             "entry_location": entry_location,
             "images": images,
+            "GOOGLE_MAP_API_KEY": settings.GOOGLE_MAP_API_KEY,
         },
     )
 

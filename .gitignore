@@ -1,3 +1,5 @@
+# ignore media folder
+diaryWebsite/media/*
 ### OSX ###
 .DS_Store
 .AppleDouble
