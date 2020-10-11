@@ -1,6 +1,28 @@
 {% extends 'diary/base.html' %}
 {% load markdown_deux_tags %}
 {% block content %}
+<div class="row my-4">
+  <h1 class="text-truncate d-inline">Tagebücher</h1>
+  <div class="ml-auto">
+    {% if user.is_authenticated%}
+    <!-- Allow creating new diaries -->
+    <a href="{% url 'diary-create' %}" class="btn btn-outline-dark"><i class="fas fa-plus"></i></a>
+    {% endif %}
+  </div>
+</div>
+<form method="GET">
+  <div class="row">
+    <div class="col-6 mb-2">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" onChange="this.form.submit()" value="" name="onlyOwnDiaries"
+          id="onlyOwnDiaries" {% if onlyOwnDiariesSelected %}checked{% endif %}>
+        <label class="form-check-label" for="onlyOwnDiaries">
+          Nur eigene Tagebücher
+        </label>
+      </div>
+    </div>
+  </div>
+</form>
 <div class="card-columns">
   {% for diary, image in diaries_and_images %}
   <div class="card">

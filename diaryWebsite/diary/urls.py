@@ -5,10 +5,12 @@ from .views import DiaryDeleteView
 
 urlpatterns = [
     path("", views.diaries_overview, name="diaries-overview"),
+    path("map", views.map_view, name="map-view"),
     path("diary/<int:pk>", views.diary_detail, name="diary-detail"),
+    path("diary/create", views.diary_create, name="diary-create"),
     path("diary/<int:pk>/update", views.diary_update, name="diary-update"),
     path("diary/<int:pk>/delete", DiaryDeleteView.as_view(), name="diary-delete"),
-    path("diary/<int:pk>/addEntry", views.add_entry, name="add-entry"),
+    path("diary/<int:pk>/addEntry", views.create_entry, name="create-entry"),
     path("diary/<int:pk>/gallery", views.diary_gallery, name="diary-gallery"),
     path(
         "diary/<int:diary_pk>/entry/<int:entry_pk>",

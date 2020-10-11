@@ -3,6 +3,8 @@
 <div class="map" id="map"></div>
   {{ diary_location|json_script:"diary_loc" }}
   {{ locations|json_script:"locations" }}
+  {{ labels|json_script:"labels" }}
+  {{ urls|json_script:"urls" }}
 </div>
 <script type="text/javascript" src="{% static 'diary/js/map.js' %}"></script>
 <script defer

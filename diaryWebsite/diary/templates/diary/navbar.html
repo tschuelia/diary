@@ -12,10 +12,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">A1</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">A2</a>
+                <a class="nav-link" href="{% url 'map-view' %}">Kartenansicht</a>
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item dropdown">
@@ -24,12 +21,12 @@
                     <i class="fas fa-user"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Logout</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                 </div>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link " href="#">Login</a>
+                <a class="nav-link " href="{% url 'login' %}">Login</a>
             </li>
             {% endif %}
         </ul>

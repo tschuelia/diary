@@ -27,15 +27,14 @@
 </p>
 <hr>
 
-{% include "diary/map.html" with diary_location=diary_location locations=locations %}
+{% include "diary/map.html" with diary_location=diary_location locations=locations labels=labels urls=urls%}
 <hr>
 <div class="row my-4 mx-2">
     <h3 class="text-truncate d-inline">Einträge</h3>
     <div class="ml-auto">
         {% if diary.owner == user%}
         <!-- Allow adding entries -->
-        <a href={% url 'add-entry' diary.pk %} class="btn btn-outline-dark"><i class="fas fa-plus"></i>
-            Neu</a>
+        <a href={% url 'create-entry' diary.pk %} class="btn btn-outline-dark"><i class="fas fa-plus"></i></a>
         {% endif %}
     </div>
 </div>
