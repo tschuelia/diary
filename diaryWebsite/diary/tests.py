@@ -117,3 +117,107 @@ class PermissionTest(TestCase):
             f"/diary/{self.auth_diary.pk}/entry/{self.auth_diary_entry.pk}/addimages"
         )
         self.assertEqual(response.status_code, 403)
+
+
+class ModelTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self._dummy_data()
+
+    def _dummy_data(self):
+        self.user1 = User.objects.create_user("user1", "user1@test.com", "user1")
+
+        self.diary1 = Diary.objects.create(
+            title="diary1",
+            start_date=datetime.now(),
+            end_date=datetime.now(),
+            location=Point(1, 1),
+            location_alias="location_test",
+            summary="summary_test",
+            owner=self.user1,
+        )
+
+        self.diary2 = Diary.objects.create(
+            title="diary2",
+            start_date=datetime.now(),
+            end_date=datetime.now(),
+            location=Point(1, 1),
+            location_alias="location_test",
+            summary="summary_test",
+            owner=self.user1,
+        )
+
+        self.entry1_diary1 = Entry.objects.create(
+            diary=self.diary1,
+            title="diary1_entry",
+            start_date=datetime.now(),
+            location=Point(0, 0),
+            summary="Entry_summary",
+            description="Entry Description",
+        )
+
+        self.entry2_diary1 = Entry.objects.create(
+            diary=self.diary1,
+            title="diary2_entry",
+            start_date=datetime.now(),
+            location=Point(0, 0),
+            summary="Entry_summary",
+            description="Entry Description",
+        )
+
+        self.entry1_diary2 = Entry.objects.create(
+            diary=self.diary2,
+            title="diary1_entry",
+            start_date=datetime.now(),
+            location=Point(0, 0),
+            summary="Entry_summary",
+            description="Entry Description",
+        )
+
+    def test_diary_get_entries(self):
+        entries = self.diary1.get_entries()
+        assert len(entries) == 2
+        assert entries[0] == self.entry1_diary1
+        assert entries[1] == self.entry2_diary1
+
+
+class ViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self._dummy_data()
+
+    def _dummy_data(self):
+        self.user1 = User.objects.create_user("user1", "user1@test.com", "user1")
+        self.user2 = User.objects.create_user("user2", "user2@test.com", "user2")
+
+        self.diary_user1 = Diary.objects.create(
+            title="diary1",
+            start_date=datetime.now(),
+            end_date=datetime.now(),
+            location=Point(1, 1),
+            location_alias="location_test",
+            summary="summary_test",
+            owner=self.user1,
+        )
+
+        self.diary_user2 = Diary.objects.create(
+            title="diary2",
+            start_date=datetime.now(),
+            end_date=datetime.now(),
+            location=Point(1, 1),
+            location_alias="location_test",
+            summary="summary_test",
+            owner=self.user2,
+        )
+
+    def test_diaries_overview(self):
+        self.client.login(username="user1", password="user1")
+        response = self.client.get("/")
+        self.assertContains(response, self.diary_user1.title)
+        self.assertContains(response, self.diary_user2.title)
+
+    def test_diaries_overview_show_only_own(self):
+        self.client.login(username="user1", password="user1")
+        response = self.client.get("/?onlyOwnDiaries=")
+        self.assertContains(response, self.diary_user1.title)
+        self.assertNotContains(response, self.diary_user2.title)
