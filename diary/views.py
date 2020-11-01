@@ -144,7 +144,13 @@ def create_entry(request, pk):
         entry_form = EntryForm(request.POST)
         image_formset = ImageFormSet(request.POST)
         entry_form.instance.diary = diary
-        entry = entry_form.save()
+        if not entry_form.is_valid():
+            return render(
+                request,
+                "diary/entry_form.html",
+                {"entry_form": entry_form, "images": image_formset},
+            )
+        entry_form.save()
         return redirect("diary-detail", pk=pk)
 
 
