@@ -1,9 +1,0 @@
-Django<4
-pillow
-django-crispy-forms<2
-django-fontawesome-5
-django-activeurl
-django-pagedown
-django-markdown-deux
-django-map-widgets
-django-bootstrap-datepicker-plus

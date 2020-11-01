@@ -1,5 +1,7 @@
 # ignore media folder
-diaryWebsite/media/*
+media/*
+# ignore compiled static files
+staticfiles/*
 ### OSX ###
 .DS_Store
 .AppleDouble
