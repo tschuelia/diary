@@ -17,7 +17,7 @@
     {{ formset.management_form|crispy }}
 
     {% for form in formset.forms %}
-    <tr class="images-{{ images.prefix }}">
+    <tr class="formset-{{ formset.prefix }}">
       {% for field in form.visible_fields %}
       <td>
         {# Include the hidden fields in the form #}
@@ -36,10 +36,10 @@
 </div>
 <script src="{% static 'diary/js/jquery.formset.js' %}"></script>
 <script type="text/javascript">
-        $('.images-{{ images.prefix }}').formset({
+        $('.formset-{{ formset.prefix }}').formset({
           addText: 'Bild <i class="col-2 fas fa-plus"></i>',
           deleteText: '<i class="col-2 fas fa-trash"></i>',
-          prefix: '{{ images.prefix }}',
+          prefix: '{{ formset.prefix }}',
           addCssClass: 'btn btn-secondary',
           deleteCssClass: 'btn text-danger'
         });

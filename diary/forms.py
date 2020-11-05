@@ -66,5 +66,5 @@ ImageFormSet = inlineformset_factory(
     form=ImageForm,
     fields=("image", "description"),
     can_delete=True,
-    extra=10,
+    extra=1,
 )
