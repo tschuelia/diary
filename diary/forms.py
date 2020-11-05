@@ -55,16 +55,25 @@ class ImageForm(forms.ModelForm):
         image_obj = super().save(commit=False)
         if "image" in self.changed_data:
             image = PIL.Image.open(image_obj.image)
-            exif = {
-                PIL.ExifTags.TAGS[k]: v
-                for k, v in image._getexif().items()
-                if k in PIL.ExifTags.TAGS
-            }
-            if "DateTimeOriginal" in exif.keys():
-                dtorig = exif["DateTimeOriginal"]
-                # DateTimeOriginal is of format "2019:01:11 11:08:47"
-                image_obj.date = datetime.strptime(dtorig, "%Y:%m:%d %H:%M:%S")
-            # TODO: process geolocation information
+            image_obj.height = image.size[1]
+            image_obj.width = image.size[0]
+            # check if image has exif data
+            if image._getexif():
+                exif = {
+                    PIL.ExifTags.TAGS[k]: v
+                    for k, v in image._getexif().items()
+                    if k in PIL.ExifTags.TAGS
+                }
+                if "DateTimeOriginal" in exif.keys():
+                    dtorig = exif["DateTimeOriginal"]
+                    # DateTimeOriginal is of format "2019:01:11 11:08:47"
+                    image_obj.date = datetime.strptime(dtorig, "%Y:%m:%d %H:%M:%S")
+                # TODO: process geolocation information
+                if "Orientation" in exif.keys() and (
+                    exif["Orientation"] == 6 or exif["Orientation"] == 8
+                ):
+                    image_obj.height = image.size[0]
+                    image_obj.width = image.size[1]
 
         image_obj.save()
         return image_obj

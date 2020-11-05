@@ -55,8 +55,6 @@ class Image(models.Model):
     width = models.IntegerField()
     height = models.IntegerField()
     image = models.ImageField(
-        width_field="width",
-        height_field="height",
         default="default.jpg",
         upload_to="entry_pics",
         verbose_name="Bilder",
