@@ -1,36 +1,37 @@
-<div class="row row-cols-3 my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+<div class="my-gallery" id="my-gallery">
+<div class="row row-cols-3">
   {% for img in images|slice:":3" %}
-  <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-    <a href="{{ img.get_url }}" itemprop="contentUrl" data-size="{{ img.width }}x{{ img.height }}">
-      <img src="{{ img.get_url }}" itemprop="thumbnail" alt="Image description" style="max-width: 90%;" />
+  <figure>
+    <a href="{{ img.get_url }}" data-size="{{ img.width }}x{{ img.height }}">
+      <img src="{{ img.get_url }}" alt="Image description" style="max-width: 90%;" />
     </a>
-    <figcaption style="display: none;" itemprop="caption description">{{ img.description }}</figcaption>
+    <figcaption style="display: none;" >{{ img.description }}</figcaption>
   </figure>
   {% endfor %}
 </div>
 {% if images|length > 3 %}
 <div class="row">
   <div class="ml-auto">
-    <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#collapseExample"
-      aria-expanded="false" aria-controls="collapseExample">
-      alle {{ images|length }} Bilder anzeigen
+    <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#collapseGallery"
+      aria-expanded="false" aria-controls="collapseGallery">
+      {{ images|length|add:"-3" }} weitere <i class="fas fa-chevron-down"></i> 
     </button>
   </div>
 </div>
-<div class="collapse" id="collapseExample">
-  <div class="row row-cols-3 my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+<div class="collapse" id="collapseGallery">
+  <div class="row row-cols-3">
     {% for img in images|slice:"3:" %}
-    <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-      <a href="{{ img.get_url }}" itemprop="contentUrl" data-size="{{ img.width }}x{{ img.height }}">
-        <img src="{{ img.get_url }}" itemprop="thumbnail" alt="Image description" style="max-width: 90%;" />
+    <figure>
+      <a href="{{ img.get_url }}" data-size="{{ img.width }}x{{ img.height }}">
+        <img src="{{ img.get_url }}" alt="Image description" style="max-width: 90%;" />
       </a>
-      <figcaption style="display: none;" itemprop="caption description">{{ img.description }}</figcaption>
+      <figcaption style="display: none;" >{{ img.description }}</figcaption>
     </figure>
     {% endfor %}
   </div>
 </div>
 {% endif %}
-
+</div>
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
@@ -101,7 +102,7 @@
     // parse slide data (url, title, size ...) from DOM elements 
     // (children of gallerySelector)
     var parseThumbnailElements = function (el) {
-      var thumbElements = el.childNodes,
+      var thumbElements = document.querySelectorAll("div.my-gallery figure"),
         numNodes = thumbElements.length,
         items = [],
         figureEl,
@@ -112,13 +113,8 @@
       for (var i = 0; i < numNodes; i++) {
 
         figureEl = thumbElements[i]; // <figure> element
-
-        // include only element nodes 
-        if (figureEl.nodeType !== 1) {
-          continue;
-        }
-
-        linkEl = figureEl.children[0]; // <a> element
+      
+        linkEl = figureEl.querySelector("a"); // <a> element
 
         size = linkEl.getAttribute('data-size').split('x');
 
@@ -131,20 +127,19 @@
 
 
 
-        if (figureEl.children.length > 1) {
+        if (figureEl.querySelector("figcaption")) {
           // <figcaption> content
-          item.title = figureEl.children[1].innerHTML;
+          item.title = figureEl.querySelector("figcaption").innerHTML;
         }
 
-        if (linkEl.children.length > 0) {
+        if (linkEl.querySelector("img")) {
           // <img> thumbnail element, retrieving thumbnail url
-          item.msrc = linkEl.children[0].getAttribute('src');
+          item.msrc = linkEl.querySelector("img").getAttribute('src');
         }
 
         item.el = figureEl; // save link to element for getThumbBoundsFn
         items.push(item);
       }
-
       return items;
     };
 
@@ -171,8 +166,9 @@
 
       // find index of clicked item by looping through all child nodes
       // alternatively, you may define index via data- attribute
-      var clickedGallery = clickedListItem.parentNode,
-        childNodes = clickedListItem.parentNode.childNodes,
+      var clickedGallery = document.getElementById("my-gallery"),
+
+        childNodes = document.querySelectorAll("div.my-gallery figure"),
         numChildNodes = childNodes.length,
         nodeIndex = 0,
         index;
@@ -188,8 +184,6 @@
         }
         nodeIndex++;
       }
-
-
 
       if (index >= 0) {
         // open PhotoSwipe if valid index found

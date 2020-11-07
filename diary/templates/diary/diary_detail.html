@@ -26,9 +26,6 @@
         Bildergalerie </a>
 </p>
 <hr>
-
-{% include "diary/map.html" with diary_location=diary_location locations=locations labels=labels urls=urls%}
-<hr>
 <div class="row my-4 mx-2">
     <h3 class="text-truncate d-inline">Einträge</h3>
     <div class="ml-auto">
@@ -60,4 +57,8 @@
     </div>
     {% endfor %}
 </div>
+<hr>
+
+{% include "diary/map.html" with diary_location=diary_location locations=locations labels=labels urls=urls%}
+
 {% endblock content %}
