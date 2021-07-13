@@ -111,8 +111,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_URL = "/media/"
 
-SPATIALITE_LIBRARY_PATH = "/usr/local/lib/mod_spatialite.dylib"
-
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MAP_WIDGETS = {

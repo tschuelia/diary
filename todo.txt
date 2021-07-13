@@ -1,3 +1,5 @@
 - user permissions:
     - update/add nur für owner
     - view mit django view permission groups
+- mapwidget zeigt keinen Fehler falls keine location ausgewählt wurde 
+- markdown tag zeigt keine Zeilenumbrüche an
