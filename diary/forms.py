@@ -5,7 +5,7 @@ from bootstrap_datepicker_plus import DateTimePickerInput
 from pagedown.widgets import AdminPagedownWidget, PagedownWidget
 from mapwidgets.widgets import GooglePointFieldWidget
 
-from .models import Diary, Entry, Image
+from .models import Diary, Entry, Image, File
 from .utils import get_image_date, get_image_size
 
 
@@ -49,7 +49,7 @@ class ImageForm(forms.ModelForm):
         fields = ["image", "description"]
 
     def save(self, *args, **kwargs):
-        image_obj = super().save(commit=False)
+        image_obj = super().save(commit=False, *args, **kwargs)
         if "image" in self.changed_data:
             image_obj.date = get_image_date(image_obj.image)
             image_size = get_image_size(image_obj.image)
@@ -60,11 +60,29 @@ class ImageForm(forms.ModelForm):
         return image_obj
 
 
+class FileForm(forms.ModelForm):
+    class Meta:
+        model = File
+        fields = ["file", "filename", "description"]
+
+    def save(self, *args, **kwargs):
+        return super().save(*args, **kwargs)
+
+
 ImageFormSet = inlineformset_factory(
     Entry,
     Image,
     form=ImageForm,
     fields=("image", "description"),
+    can_delete=True,
+    extra=1,
+)
+
+FileFormSet = inlineformset_factory(
+    Entry,
+    File,
+    form=FileForm,
+    fields=("file", "filename", "description"),
     can_delete=True,
     extra=1,
 )

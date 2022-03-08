@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.views.generic import DeleteView
 
 from .models import Diary, Entry
-from .forms import DiaryForm, EntryForm, ImageFormSet
+from .forms import DiaryForm, EntryForm, ImageFormSet, FileFormSet
 
 from django.conf import settings
 
@@ -112,6 +112,8 @@ def entry_detail(request, diary_pk, entry_pk):
     entry = get_object_or_404(Entry, pk=entry_pk)
     entry_location = (entry.location.x, entry.location.y)
     images = entry.get_images()
+    files = entry.get_files()
+
     return render(
         request,
         "diary/entry_detail.html",
@@ -120,6 +122,7 @@ def entry_detail(request, diary_pk, entry_pk):
             "entry": entry,
             "entry_location": entry_location,
             "images": images,
+            "files": files,
             "GOOGLE_MAP_API_KEY": settings.GOOGLE_MAP_API_KEY,
         },
     )
@@ -135,6 +138,7 @@ def create_entry(request, pk):
     if request.method == "GET":
         entry_form = EntryForm()
         image_formset = ImageFormSet()
+        file_formset = FileFormSet()
         return render(
             request,
             "diary/entry_form.html",
@@ -143,6 +147,7 @@ def create_entry(request, pk):
     else:
         entry_form = EntryForm(request.POST)
         image_formset = ImageFormSet(request.POST)
+        file_formset = FileFormSet(request.POST)
         entry_form.instance.diary = diary
         if not entry_form.is_valid():
             return render(
@@ -202,6 +207,25 @@ def add_images_to_entry(request, diary_pk, entry_pk):
         formset = ImageFormSet(request.POST, request.FILES, instance=entry)
         if not formset.is_valid():
             return render(request, "diary/entry_images_form.html", {"formset": formset})
+        formset.save()
+        return redirect("entry-detail", diary_pk=diary_pk, entry_pk=entry_pk)
+
+
+@login_required
+def add_files_to_entry(request, diary_pk, entry_pk):
+    diary = get_object_or_404(Diary, pk=diary_pk)
+    if diary.owner != request.user:
+        raise PermissionDenied
+
+    entry = get_object_or_404(Entry, pk=entry_pk)
+
+    if request.method == "GET":
+        formset = FileFormSet(instance=entry)
+        return render(request, "diary/entry_files_form.html", {"formset": formset})
+    else:
+        formset = FileFormSet(request.POST, request.FILES, instance=entry)
+        if not formset.is_valid():
+            return render(request, "diary/entry_files_form.html", {"formset": formset})
         formset.save()
         return redirect("entry-detail", diary_pk=diary_pk, entry_pk=entry_pk)
 

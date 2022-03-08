@@ -50,6 +50,9 @@ class Entry(models.Model):
     def get_images(self):
         return self.image_of.all().order_by("date")
 
+    def get_files(self):
+        return self.file_of.all().order_by("filename")
+
 
 class Image(models.Model):
     width = models.IntegerField()
@@ -81,3 +84,18 @@ class Image(models.Model):
         if not self.location:
             return self.entry.location
         return self.location
+
+
+class File(models.Model):
+    file = models.FileField(upload_to="entry_files", verbose_name="Datei")
+    filename = models.CharField(max_length=255, verbose_name="Dateiname")
+    description = models.TextField(verbose_name="Beschreibung", blank=True, null=True)
+    entry = models.ForeignKey(
+        Entry, related_name="file_of", on_delete=models.CASCADE, null=True
+    )
+
+    def __str__(self):
+        return self.entry.title
+
+    def get_url(self):
+        return self.file.url
