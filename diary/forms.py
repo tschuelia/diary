@@ -49,7 +49,8 @@ class ImageForm(forms.ModelForm):
         fields = ["image", "description"]
 
     def save(self, *args, **kwargs):
-        image_obj = super().save(commit=False, *args, **kwargs)
+        kwargs["commit"] = False
+        image_obj = super().save(*args, **kwargs)
         if "image" in self.changed_data:
             image_obj.date = get_image_date(image_obj.image)
             image_size = get_image_size(image_obj.image)
