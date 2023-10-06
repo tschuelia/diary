@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import inlineformset_factory
 
-from bootstrap_datepicker_plus import DateTimePickerInput
+from bootstrap_datepicker_plus.widgets import DatePickerInput
 from pagedown.widgets import AdminPagedownWidget, PagedownWidget
 from mapwidgets.widgets import GooglePointFieldWidget
 
@@ -17,8 +17,8 @@ class DiaryForm(forms.ModelForm):
         exclude = ("owner",)
         widgets = {
             "location": GooglePointFieldWidget,
-            "start_date": DateTimePickerInput(format="%Y-%m-%d"),
-            "end_date": DateTimePickerInput(format="%Y-%m-%d"),
+            "start_date": DatePickerInput(format="%Y-%m-%d"),
+            "end_date": DatePickerInput(format="%Y-%m-%d"),
         }
 
 
@@ -38,8 +38,8 @@ class EntryForm(forms.ModelForm):
         ]
         widgets = {
             "location": GooglePointFieldWidget,
-            "start_date": DateTimePickerInput(format="%Y-%m-%d"),
-            "end_date": DateTimePickerInput(format="%Y-%m-%d"),
+            "start_date": DatePickerInput(format="%Y-%m-%d"),
+            "end_date": DatePickerInput(format="%Y-%m-%d"),
         }
 
 

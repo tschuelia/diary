@@ -29,6 +29,12 @@ class Diary(models.Model):
         entry_pks = [e.pk for e in self.get_entries()]
         return Image.objects.filter(entry__in=entry_pks)
 
+    def get_summary(self):
+        if len(self.summary) > 250:
+            return self.summary[:250] + "..."
+        else:
+            return self.summary
+
 
 class Entry(models.Model):
     diary = models.ForeignKey(
