@@ -19,6 +19,8 @@ def diaries_overview(request):
     if showOnlyOwnDiaries:
         diaries = diaries.filter(owner=request.user)
 
+    diaries = diaries.order_by("-start_date")
+
     diaries_and_images = [(d, d.get_images().order_by("?").first()) for d in diaries]
     return render(
         request,
