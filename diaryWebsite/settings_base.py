@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "django.contrib.gis",
+    "sorl.thumbnail",
 ]
 
 MIDDLEWARE = [

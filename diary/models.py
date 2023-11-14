@@ -105,3 +105,9 @@ class File(models.Model):
 
     def get_url(self):
         return self.file.url
+
+
+def get_diaries_for_user(user):
+    diaries = Diary.objects.all()
+    diaries = diaries.filter(owner=user)
+    return diaries.order_by("-start_date")

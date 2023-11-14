@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.generic import DeleteView
 
-from .models import Diary, Entry
+from .models import Diary, Entry, get_diaries_for_user
 from .forms import DiaryForm, EntryForm, ImageFormSet, FileFormSet
 
 from django.conf import settings
@@ -13,13 +13,7 @@ from django.conf import settings
 
 @login_required
 def diaries_overview(request):
-    diaries = Diary.objects.all()
-    showOnlyOwnDiaries = "onlyOwnDiaries" in request.GET
-
-    if showOnlyOwnDiaries:
-        diaries = diaries.filter(owner=request.user)
-
-    diaries = diaries.order_by("-start_date")
+    diaries = get_diaries_for_user(request.user)
 
     diaries_and_images = [(d, d.get_images().order_by("?").first()) for d in diaries]
     return render(
@@ -27,7 +21,6 @@ def diaries_overview(request):
         "diary/diaries_overview.html",
         {
             "diaries_and_images": diaries_and_images,
-            "onlyOwnDiariesSelected": showOnlyOwnDiaries,
         },
     )
 
