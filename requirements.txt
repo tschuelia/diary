@@ -10,4 +10,5 @@ whitenoise<6
 gunicorn
 dj_static
 six
+sorl-thumbnail
 git+https://github.com/tschuelia/django-map-widgets@patch-1
