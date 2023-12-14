@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.gis.db import models as gisModels
-from django.contrib.gis.geos import Point
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
 
-from datetime import datetime
+from diaryWebsite.settings_base import IMAGE_EXTENSIONS, VIDEO_EXTENSIONS
 
 
 class Diary(models.Model):
@@ -63,15 +63,22 @@ class Entry(models.Model):
 class Image(models.Model):
     width = models.IntegerField()
     height = models.IntegerField()
-    image = models.ImageField(
+    image = models.FileField(
         default="default.jpg",
         upload_to="entry_pics",
         verbose_name="Bilder",
+        validators=[FileExtensionValidator(IMAGE_EXTENSIONS + VIDEO_EXTENSIONS)]
     )
+    video_thumbnail = models.ImageField(
+        upload_to="entry_pics",
+        blank=True,
+        null=True
+    )
+    is_image = models.BooleanField(default=True)
     entry = models.ForeignKey(
         Entry, related_name="image_of", on_delete=models.CASCADE, null=True
     )
-    description = models.TextField(blank=True, verbose_name="Bildbeschreibung")
+    description = models.TextField(blank=True, verbose_name="Beschreibung")
     date = models.DateTimeField(blank=True, null=True)
     location = gisModels.PointField(blank=True, null=True)
 
@@ -80,6 +87,9 @@ class Image(models.Model):
 
     def get_url(self):
         return self.image.url
+
+    def get_video_thumbnail_url(self):
+        return self.video_thumbnail.url
 
     def get_date(self):
         if not self.date:

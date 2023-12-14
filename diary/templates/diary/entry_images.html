@@ -1,15 +1,7 @@
-{% load thumbnail %}
 <div class="my-gallery" id="my-gallery">
     <div class="row row-cols-3">
         {% for img in images|slice:":3" %}
-            <figure>
-                <a href="{{ img.get_url }}" data-size="{{ img.width }}x{{ img.height }}">
-                    {% thumbnail img.image "500" as im %}
-                        <img src="{{ im.url }}" class="col-md">
-                    {% endthumbnail %}
-                </a>
-                <figcaption style="display: none;">{{ img.description }}</figcaption>
-            </figure>
+            {% include "diary/_image_gallery_item.html" with img=img %}
         {% endfor %}
     </div>
     {% if images|length > 3 %}
@@ -24,14 +16,7 @@
         <div class="collapse" id="collapseGallery">
             <div class="row row-cols-3">
                 {% for img in images|slice:"3:" %}
-                    <figure>
-                        <a href="{{ img.get_url }}" data-size="{{ img.width }}x{{ img.height }}">
-                            {% thumbnail img.image "500" as im %}
-                                <img src="{{ im.url }}" class="col-md">
-                            {% endthumbnail %}
-                        </a>
-                        <figcaption style="display: none;">{{ img.description }}</figcaption>
-                    </figure>
+                    {% include "diary/_image_gallery_item.html" with img=img %}
                 {% endfor %}
             </div>
         </div>

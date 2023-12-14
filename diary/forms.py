@@ -1,12 +1,16 @@
+import pathlib
+
 from django import forms
 from django.forms import inlineformset_factory
 
 from bootstrap_datepicker_plus.widgets import DatePickerInput
-from pagedown.widgets import AdminPagedownWidget, PagedownWidget
+from pagedown.widgets import PagedownWidget
 from mapwidgets.widgets import GooglePointFieldWidget
 
 from .models import Diary, Entry, Image, File
-from .utils import get_image_date, get_image_size
+from .utils import get_image_date_and_dimensions, get_video_date_and_dimensions, get_video_thumbnail
+
+from diaryWebsite.settings_base import IMAGE_EXTENSIONS, VIDEO_EXTENSIONS
 
 
 class DiaryForm(forms.ModelForm):
@@ -52,11 +56,24 @@ class ImageForm(forms.ModelForm):
         kwargs["commit"] = False
         image_obj = super().save(*args, **kwargs)
         if "image" in self.changed_data:
-            image_obj.date = get_image_date(image_obj.image)
-            image_size = get_image_size(image_obj.image)
-            image_obj.height = image_size[0]
-            image_obj.width = image_size[1]
+            # check if the uploaded file is an image or a video
+            file_extension = pathlib.Path(image_obj.image.url).suffix[1:].lower()
+            if file_extension in IMAGE_EXTENSIONS:
+                image_obj.date, image_obj.height, image_obj.width = get_image_date_and_dimensions(image_obj.image)
+                image_obj.is_image = True
+            elif file_extension in VIDEO_EXTENSIONS:
+                temporary_video_path = self.cleaned_data["image"].temporary_file_path()
+                image_obj.date, image_obj.height, image_obj.width = get_video_date_and_dimensions(temporary_video_path)
+                image_obj.is_image = False
 
+                # thumbnail to display in the gallery
+                thumbnail = get_video_thumbnail(temporary_video_path)
+                image_obj.video_thumbnail.save(
+                    f"{pathlib.Path(image_obj.image.url).stem}_thumbnail.jpg",
+                    thumbnail
+                )
+            else:
+                raise ValueError("Unsupported file format: ", file_extension)
         image_obj.save()
         return image_obj
 

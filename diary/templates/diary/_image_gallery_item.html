@@ -1,0 +1,17 @@
+{% load thumbnail %}
+<figure>
+    {% if img.is_image %}
+        <a href="{{ img.get_url }}" data-size="{{ img.width }}x{{ img.height }}">
+        {% thumbnail img.image "500" as im %}
+            <img src="{{ im.url }}" class="col-md">
+        {% endthumbnail %}
+    {% else %}
+        <a href="{{ img.get_url }}" data-size="{{ img.width }}x{{ img.height }}">
+        {% thumbnail img.video_thumbnail "500" as im %}
+            <img src="{{ img.get_video_thumbnail_url }}" class="col-md">
+        {% endthumbnail %}
+     {% endif %}
+    </a>
+
+    <figcaption style="display: none;">{{ img.description }}</figcaption>
+</figure>
