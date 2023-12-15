@@ -8,3 +8,13 @@ body {
     height: 400px;
     background-color: grey;
 }
+
+.pswp__dynamic-caption {
+    color: #fff;
+    width: 100%;
+}
+
+.pswp__dynamic-caption a {
+    color: #fff;
+    text-decoration: underline;
+}

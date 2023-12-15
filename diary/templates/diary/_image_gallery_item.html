@@ -1,17 +1,34 @@
 {% load thumbnail %}
+<div class="pswp-gallery__item">
 <figure>
     {% if img.is_image %}
-        <a href="{{ img.get_url }}" data-size="{{ img.width }}x{{ img.height }}">
-        {% thumbnail img.image "500" as im %}
-            <img src="{{ im.url }}" class="col-md">
-        {% endthumbnail %}
+        <a href="{{ img.get_url }}"
+           data-pswp-width="{{ img.width }}"
+           data-pswp-height="{{ img.height }}"
+           target="_blank">
+            {% thumbnail img.image "500" as im %}
+                <img src="{{ im.url }}" class="col-md">
+            {% endthumbnail %}
+            {% if img.description %}
+                <span class="pswp-caption-content">{{ img.description }}</span>
+            {% endif %}
+        </a>
+
     {% else %}
-        <a href="{{ img.get_url }}" data-size="{{ img.width }}x{{ img.height }}">
-        {% thumbnail img.video_thumbnail "500" as im %}
-            <img src="{{ img.get_video_thumbnail_url }}" class="col-md">
-        {% endthumbnail %}
-     {% endif %}
-    </a>
+        <a href="{{ img.get_url }}"
+           data-pswp-video-src="{{ img.get_url }}"
+           data-pswp-width="{{ img.width }}"
+           data-pswp-height="{{ img.height }}"
+           data-pswp-type="video">
+            {% thumbnail img.video_thumbnail "500" as im %}
+                <img src="{{ img.get_video_thumbnail_url }}" class="col-md">
+            {% endthumbnail %}
+            {% if img.description %}
+                <span class="pswp-caption-content">{{ img.description }}</span>
+            {% endif %}
+        </a>
+    {% endif %}
 
     <figcaption style="display: none;">{{ img.description }}</figcaption>
 </figure>
+</div>
