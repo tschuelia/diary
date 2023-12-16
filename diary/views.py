@@ -148,8 +148,8 @@ def create_entry(request, pk):
                 "diary/entry_form.html",
                 {"entry_form": entry_form, "images": image_formset},
             )
-        entry_form.save()
-        return redirect("diary-detail", pk=pk)
+        entry = entry_form.save()
+        return redirect("entry-detail", diary_pk=pk, entry_pk=entry.pk)
 
 
 @login_required
