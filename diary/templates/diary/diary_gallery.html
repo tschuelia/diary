@@ -1,30 +1,30 @@
 {% extends 'diary/base.html' %}
 {% block content %}
-<div class="row my-4">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb bg-light">
-            <li class="breadcrumb-item"><a class="text-dark" href="{% url 'diaries-overview' %}">Übersicht</a></li>
-            <li class="breadcrumb-item"><a class="text-dark"
-                    href="{% url 'diary-detail' pk=diary.pk %}">{{ diary.title }}</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">Bildergalerie</li>
-        </ol>
-    </nav>
-</div>
-<h1>{{ diary.title }}</h1>
-<hr>
-{% for entry, images in entries_and_images %}
-<h3><a class="text-dark mx-2"
-        href="{% url 'entry-detail' diary_pk=entry.diary.pk entry_pk=entry.pk %}">{{ entry.title }}</a>
-</h3>
-<div class="mx-4 my-4">
-    {% if images %}
-    {% include "diary/entry_images.html" with images=images %}
-    {% else %}
-    <p>Keine Bilder für diesen Eintrag</p>
-    {% endif %}
-</div>
+    <div class="row my-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-light">
+                <li class="breadcrumb-item"><a class="text-dark" href="{% url 'diaries-overview' %}">Übersicht</a></li>
+                <li class="breadcrumb-item"><a class="text-dark"
+                                               href="{% url 'diary-detail' pk=diary.pk %}">{{ diary.title }}</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Bildergalerie</li>
+            </ol>
+        </nav>
+    </div>
+    <h1>{{ diary.title }}</h1>
+    <hr>
+    {% for entry, images in entries_and_images %}
+        <h3><a class="text-dark mx-2"
+               href="{% url 'entry-detail' diary_pk=entry.diary.pk entry_pk=entry.pk %}">{{ entry.title }}</a>
+        </h3>
+        <div class="mx-4 my-4">
+            {% if images %}
+                {% include "diary/entry_images.html" with images=images title=entry.title%}
+            {% else %}
+                <p>Keine Bilder für diesen Eintrag</p>
+            {% endif %}
+        </div>
 
-<hr>
-{% endfor %}
+        <hr>
+    {% endfor %}
 {% endblock content %}

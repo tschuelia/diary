@@ -15,7 +15,7 @@ from django.conf import settings
 def diaries_overview(request):
     diaries = get_diaries_for_user(request.user)
 
-    diaries_and_images = [(d, d.get_images().order_by("?").first()) for d in diaries]
+    diaries_and_images = [(d, d.get_images().filter(is_image=True).order_by("?").first()) for d in diaries]
     return render(
         request,
         "diary/diaries_overview.html",
@@ -29,7 +29,7 @@ def diaries_overview(request):
 def diary_detail(request, pk):
     diary = get_object_or_404(Diary, pk=pk)
     entries = diary.get_entries()
-    entries_and_images = [(e, e.get_images().order_by("?").first()) for e in entries]
+    entries_and_images = [(e, e.get_images().filter(is_image=True).order_by("?").first()) for e in entries]
     locations = [(e.location.x, e.location.y) for e in entries]
     labels = [e.title for e in entries]
     urls = [
@@ -133,7 +133,6 @@ def create_entry(request, pk):
     if request.method == "GET":
         entry_form = EntryForm()
         image_formset = ImageFormSet()
-        file_formset = FileFormSet()
         return render(
             request,
             "diary/entry_form.html",
@@ -142,7 +141,6 @@ def create_entry(request, pk):
     else:
         entry_form = EntryForm(request.POST)
         image_formset = ImageFormSet(request.POST)
-        file_formset = FileFormSet(request.POST)
         entry_form.instance.diary = diary
         if not entry_form.is_valid():
             return render(
@@ -227,12 +225,7 @@ def add_files_to_entry(request, diary_pk, entry_pk):
 
 @login_required
 def map_view(request):
-    diaries = Diary.objects.all()
-    showOnlyOwnDiaries = "onlyOwnDiaries" in request.GET
-
-    if showOnlyOwnDiaries:
-        diaries = diaries.filter(owner=request.user)
-
+    diaries = Diary.objects.all().filter(owner=request.user)
     locations = [(d.location.x, d.location.y) for d in diaries]
     labels = [d.title for d in diaries]
     urls = [reverse("diary-detail", kwargs={"pk": d.pk}) for d in diaries]
@@ -244,6 +237,5 @@ def map_view(request):
             "labels": labels,
             "urls": urls,
             "GOOGLE_MAP_API_KEY": settings.GOOGLE_MAP_API_KEY,
-            "onlyOwnDiariesSelected": showOnlyOwnDiaries,
         },
     )

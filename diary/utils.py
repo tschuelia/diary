@@ -1,47 +1,74 @@
+import cv2
+import datetime
+import ffmpeg
 import PIL
 import PIL.ExifTags
-from datetime import datetime
+
+from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from io import BytesIO
 
 
 def _image_exif_data(pil_image):
     if pil_image._getexif():
-        return {
-            PIL.ExifTags.TAGS[k]: v
-            for k, v in pil_image._getexif().items()
-            if k in PIL.ExifTags.TAGS
-        }
+        return {PIL.ExifTags.TAGS[k]: v for k, v in pil_image._getexif().items() if k in PIL.ExifTags.TAGS}
 
 
-def get_image_date(image):
+def get_image_date_and_dimensions(image):
     """
     Returns the datetime when the image was taken if the image has exif data.
     """
     pil_image = PIL.Image.open(image)
     exif = _image_exif_data(pil_image)
+
+    creation_time = None
+
     # check if image has exif data
     if exif and "DateTimeOriginal" in exif.keys():
         dtorig = exif["DateTimeOriginal"]
         # DateTimeOriginal is of format "2019:01:11 11:08:47"
-        return datetime.strptime(dtorig, "%Y:%m:%d %H:%M:%S")
+        creation_time = datetime.datetime.strptime(dtorig, "%Y:%m:%d %H:%M:%S").astimezone(datetime.timezone.utc)
 
-
-def get_image_size(image):
-    """
-    Returns the size of the image. The image size depends whether the image is rotated.
-    This is indicated by the exif "Orientation" key.
-    6 means the image is rotated by 90 degrees
-    8 means the image is rotated by 270 degrees
-    In both cases height and width of the image need to be flipped.
-    """
-    pil_image = PIL.Image.open(image)
-    exif = _image_exif_data(pil_image)
-    # check if image has exif data
-    if (
-        exif
-        and "Orientation" in exif.keys()
-        and (exif["Orientation"] == 6 or exif["Orientation"] == 8)
-    ):
+    if exif and "Orientation" in exif.keys() and (exif["Orientation"] == 6 or exif["Orientation"] == 8):
         # (height, width)
-        return (pil_image.size[0], pil_image.size[1])
+        height, width = pil_image.size[0], pil_image.size[1]
 
-    return (pil_image.size[1], pil_image.size[0])
+    else:
+        height, width = pil_image.size[1], pil_image.size[0]
+
+    return creation_time, height, width
+
+
+def get_video_date_and_dimensions(video_path):
+    data = ffmpeg.probe(video_path)
+    streams = data.get("streams", [])
+    width = None
+    height = None
+    creation_time = None
+    for d in streams:
+        width = d.get("width", width)
+        height = d.get("height", height)
+        creation_time = d.get("tags", {}).get("creation_time")
+
+    # For MOV iPhone videos, the correct time stamp is encoded in
+    # data["format"]["tags"]["com.apple.quicktime.creationdate"]
+    apple_creation_time = data.get("format", {}).get("tags", {}).get("com.apple.quicktime.creationdate")
+    if apple_creation_time:
+        creation_time = apple_creation_time
+
+    if creation_time:
+        creation_time = datetime.datetime.fromisoformat(creation_time).astimezone(datetime.timezone.utc)
+
+    return creation_time, width, height
+
+
+def get_video_thumbnail(video_path):
+    # read the first frame of the video and return it as django ImageField
+    vidcap = cv2.VideoCapture(video_path)
+    _, frame = vidcap.read()
+    vidcap.release()
+    pil_image = PIL.Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+    tmp_file = BytesIO()
+    pil_image.save(tmp_file, format="JPEG")
+    tmp_file = ContentFile(tmp_file.getvalue())
+    return InMemoryUploadedFile(tmp_file, None, "tmp_file.jpg", "image/jpeg", tmp_file.tell, None)

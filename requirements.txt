@@ -1,5 +1,6 @@
 Django<4
 pillow
+opencv-python
 django-crispy-forms<2
 django-fontawesome-5
 django-activeurl
@@ -11,4 +12,5 @@ gunicorn
 dj_static
 six
 sorl-thumbnail
+ffmpeg-python
 git+https://github.com/tschuelia/django-map-widgets@patch-1
