@@ -19,7 +19,7 @@
         </h3>
         <div class="mx-4 my-4">
             {% if images %}
-                {% include "diary/entry_images.html" with images=images title=entry.title%}
+                {% include "diary/entry_images.html" with images=images entry_pk=entry.pk %}
             {% else %}
                 <p>Keine Bilder für diesen Eintrag</p>
             {% endif %}

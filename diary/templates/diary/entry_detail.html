@@ -41,7 +41,7 @@
     </div>
 </div>
 <div class="mx-4">
-    {% include "diary/entry_images.html" with images=images title=entry.title%}
+    {% include "diary/entry_images.html" with images=images entry_pk=entry.pk %}
 </div>
 <br>
 <hr>
