@@ -27,7 +27,7 @@ def get_image_date_and_dimensions(image):
     if exif and "DateTimeOriginal" in exif.keys():
         dtorig = exif["DateTimeOriginal"]
         # DateTimeOriginal is of format "2019:01:11 11:08:47"
-        creation_time = datetime.datetime.strptime(dtorig, "%Y:%m:%d %H:%M:%S")
+        creation_time = datetime.datetime.strptime(dtorig, "%Y:%m:%d %H:%M:%S").astimezone(datetime.timezone.utc)
 
     if exif and "Orientation" in exif.keys() and (exif["Orientation"] == 6 or exif["Orientation"] == 8):
         # (height, width)
@@ -40,19 +40,26 @@ def get_image_date_and_dimensions(image):
 
 
 def get_video_date_and_dimensions(video_path):
-    data = ffmpeg.probe(video_path).get("streams", [])
+    data = ffmpeg.probe(video_path)
+    streams = data.get("streams", [])
     width = None
     height = None
     creation_time = None
-    for d in data:
+    for d in streams:
         width = d.get("width", width)
         height = d.get("height", height)
         creation_time = d.get("tags", {}).get("creation_time")
 
-    if creation_time:
-        creation_time = datetime.datetime.fromisoformat(creation_time)
+    # For MOV iPhone videos, the correct time stamp is encoded in
+    # data["format"]["tags"]["com.apple.quicktime.creationdate"]
+    apple_creation_time = data.get("format", {}).get("tags", {}).get("com.apple.quicktime.creationdate")
+    if apple_creation_time:
+        creation_time = apple_creation_time
 
-    return creation_time, height, width
+    if creation_time:
+        creation_time = datetime.datetime.fromisoformat(creation_time).astimezone(datetime.timezone.utc)
+
+    return creation_time, width, height
 
 
 def get_video_thumbnail(video_path):
@@ -61,7 +68,6 @@ def get_video_thumbnail(video_path):
     _, frame = vidcap.read()
     vidcap.release()
     pil_image = PIL.Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-    # tmp_file = cv2.imwrite("tmp_file.jpg", frame)
     tmp_file = BytesIO()
     pil_image.save(tmp_file, format="JPEG")
     tmp_file = ContentFile(tmp_file.getvalue())
