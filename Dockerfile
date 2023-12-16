@@ -1,7 +1,7 @@
 FROM python:3
 
 RUN apt-get update && apt-get install -y binutils libproj-dev gdal-bin
-RUN apt-get install libsqlite3-mod-spatialite
+RUN apt-get install libsqlite3-mod-spatialite ffmpeg libsm6 libxext6
 RUN mkdir /app
 
 RUN python -m venv /app/venv \
