@@ -30,7 +30,7 @@
         <i class="far fa-calendar-alt"></i> {{ entry.start_date }} {% if entry.end_date %} –
         {{ entry.end_date }}{% endif %}
     </p>
-    <p class="card-text">{{ diary.get_summary|markdown }}</p>
+    <p class="card-text">{{ entry.summary|markdown }}</p>
     <br>
     <!-- Description -->
     <div>
