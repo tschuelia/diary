@@ -17,7 +17,7 @@
                 <div class="card">
                     {% if image %}
                         {% thumbnail image.image "500" as im %}
-                            <div class="card-img-top" width="100%" height="{{ im.height }}">
+                            <div class="card-img-top">
                                 <img src="{{ im.url }}" class="card-img-top">
                             </div>
                         {% endthumbnail %}
@@ -43,10 +43,10 @@
     </div>
 
 <script>
-// layout Masonry after each image loads
-var $grid = $('.grid').masonry({});
-$grid.imagesLoaded().progress( function() {
-  $grid.masonry('layout');
+$(window).on("load", function() {
+  // All images are loaded now.
+  // Include code here that depends on images being loaded.
+    $('.grid').masonry({});
 });
 </script>
 {% endblock content %}
