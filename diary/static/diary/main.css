@@ -18,3 +18,7 @@ body {
     color: #fff;
     text-decoration: underline;
 }
+
+.card {
+    margin-bottom: 20px !important;
+ }
