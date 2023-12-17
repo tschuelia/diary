@@ -41,11 +41,11 @@
             </div>
         {% endfor %}
     </div>
-{% endblock content %}
 
 <script>
-    // layout Masonry after each image loads
-    $grid.imagesLoaded().progress( function() {
-      $grid.masonry('layout');
-    });
+// layout Masonry after each image loads
+$grid.imagesLoaded().progress( function() {
+  $grid.masonry('layout');
+});
 </script>
+{% endblock content %}
