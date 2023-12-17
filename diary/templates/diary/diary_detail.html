@@ -37,7 +37,7 @@
         </div>
     </div>
     <br>
-    <div class="row row-cols-3 row-cols-md-3" data-masonry='{"percentPosition": true }'>
+    <div class="row row-cols-3 row-cols-md-3 grid" data-masonry='{"percentPosition": true }'>
         {% for entry, image in entries_and_images %}
             <div class="col">
                 <div class="card">
@@ -67,4 +67,11 @@
 
     {% include "diary/map.html" with diary_location=diary_location locations=locations labels=labels urls=urls %}
 
+<script>
+$(window).on("load", function() {
+  // All images are loaded now.
+  // Include code here that depends on images being loaded.
+    $('.grid').masonry({});
+});
+</script>
 {% endblock content %}
