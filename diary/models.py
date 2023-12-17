@@ -1,3 +1,5 @@
+import pathlib
+
 from django.db import models
 from django.contrib.gis.db import models as gisModels
 from django.contrib.auth.models import User
@@ -83,7 +85,8 @@ class Image(models.Model):
     location = gisModels.PointField(blank=True, null=True)
 
     def __str__(self):
-        return self.entry.title
+        desc_str = f"; {self.description[:10]}..." if self.description else ""
+        return f"{self.entry.title} ({pathlib.Path(self.get_url()).name}{desc_str})"
 
     def get_url(self):
         return self.image.url
