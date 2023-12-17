@@ -47,7 +47,14 @@
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
-
+    <script>
+        var $container = $('#container');
+        // initialize Masonry after all images have loaded
+        $container.imagesLoaded( function() {
+          $container.masonry();
+        });
+</script>
 </body>
-
 </html>
+
+
