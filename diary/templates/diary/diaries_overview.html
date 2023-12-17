@@ -11,13 +11,15 @@
             {% endif %}
         </div>
     </div>
-    <div class="row row-cols-3 row-cols-md-3" data-masonry='{"percentPosition": true }'>
+    <div class="row row-cols-3 row-cols-md-3 grid" data-masonry='{"percentPosition": true }'>
         {% for diary, image in diaries_and_images %}
             <div class="col">
                 <div class="card">
                     {% if image %}
                         {% thumbnail image.image "500" as im %}
-                            <img src="{{ im.url }}" class="card-img-top">
+                            <div class="card-img-top" width="100%" height="{{ im.height }}">
+                                <img src="{{ im.url }}" class="card-img-top">
+                            </div>
                         {% endthumbnail %}
                     {% endif %}
                     <div class="card-body">
@@ -40,3 +42,10 @@
         {% endfor %}
     </div>
 {% endblock content %}
+
+<script>
+    // layout Masonry after each image loads
+    $grid.imagesLoaded().progress( function() {
+      $grid.masonry('layout');
+    });
+</script>
