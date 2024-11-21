@@ -11,7 +11,7 @@ whitenoise<6
 gunicorn
 dj_static
 six
-sorl-thumbnail
+sorl-thumbnail<12.11
 ffmpeg-python
 git+https://github.com/tschuelia/django-map-widgets@patch-1
 # debugging
