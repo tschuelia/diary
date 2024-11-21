@@ -1,4 +1,4 @@
-export PYTHONPATH=/app/diary:/mnt
+export PYTHONPATH=/app/diary:/hetzner
 export DJANGO_SETTINGS_MODULE=settings_prod
 
 cd /app/diary
