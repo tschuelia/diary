@@ -11,7 +11,6 @@ from .forms import DiaryForm, EntryForm, ImageFormSet, FileFormSet
 from django.conf import settings
 
 
-@login_required
 def diaries_overview(request):
     diaries = get_diaries_for_user(request.user)
 
@@ -25,7 +24,6 @@ def diaries_overview(request):
     )
 
 
-@login_required
 def diary_detail(request, pk):
     diary = get_object_or_404(Diary, pk=pk)
     entries = diary.get_entries()
@@ -52,7 +50,6 @@ def diary_detail(request, pk):
     )
 
 
-@login_required
 def diary_gallery(request, pk):
     diary = get_object_or_404(Diary, pk=pk)
     entries = diary.get_entries()
@@ -64,7 +61,6 @@ def diary_gallery(request, pk):
     )
 
 
-@login_required
 def diary_create(request):
     if request.method == "GET":
         form = DiaryForm()
@@ -76,7 +72,6 @@ def diary_create(request):
         return redirect("diary-detail", pk=diary.pk)
 
 
-@login_required
 def diary_update(request, pk):
     diary = get_object_or_404(Diary, pk=pk)
     if diary.owner != request.user:
@@ -101,7 +96,6 @@ class DiaryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == diary.owner
 
 
-@login_required
 def entry_detail(request, diary_pk, entry_pk):
     diary = get_object_or_404(Diary, pk=diary_pk)
     entry = get_object_or_404(Entry, pk=entry_pk)
@@ -123,7 +117,6 @@ def entry_detail(request, diary_pk, entry_pk):
     )
 
 
-@login_required
 def create_entry(request, pk):
     diary = get_object_or_404(Diary, pk=pk)
 
@@ -152,7 +145,6 @@ def create_entry(request, pk):
         return redirect("entry-detail", diary_pk=pk, entry_pk=entry.pk)
 
 
-@login_required
 def update_entry(request, diary_pk, entry_pk):
     diary = get_object_or_404(Diary, pk=diary_pk)
     entry = get_object_or_404(Entry, pk=entry_pk)
@@ -170,7 +162,6 @@ def update_entry(request, diary_pk, entry_pk):
         return redirect("entry-detail", diary_pk=diary_pk, entry_pk=entry_pk)
 
 
-@login_required
 def delete_entry(request, diary_pk, entry_pk):
     diary = get_object_or_404(Diary, pk=diary_pk)
     if diary.owner != request.user:
@@ -185,7 +176,6 @@ def delete_entry(request, diary_pk, entry_pk):
         return redirect("diary-detail", pk=diary_pk)
 
 
-@login_required
 def add_images_to_entry(request, diary_pk, entry_pk):
     diary = get_object_or_404(Diary, pk=diary_pk)
     if diary.owner != request.user:
@@ -204,7 +194,6 @@ def add_images_to_entry(request, diary_pk, entry_pk):
         return redirect("entry-detail", diary_pk=diary_pk, entry_pk=entry_pk)
 
 
-@login_required
 def add_files_to_entry(request, diary_pk, entry_pk):
     diary = get_object_or_404(Diary, pk=diary_pk)
     if diary.owner != request.user:
@@ -223,7 +212,6 @@ def add_files_to_entry(request, diary_pk, entry_pk):
         return redirect("entry-detail", diary_pk=diary_pk, entry_pk=entry_pk)
 
 
-@login_required
 def map_view(request):
     diaries = Diary.objects.all().filter(owner=request.user)
     locations = [(d.location.x, d.location.y) for d in diaries]

@@ -12,6 +12,29 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 from PIL import Image
 import os
 
+from django.conf import settings
+from django.shortcuts import redirect
+from django.urls import reverse
+
+
+class LoginRequiredMiddleware:
+    """
+    Middleware that requires a user to be authenticated to access any page.
+    Exemptions can be added for specific paths.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.exempt_urls = [reverse("login")]  # Add paths that don't require login
+
+    def __call__(self, request):
+        if not request.user.is_authenticated:
+            if not any(request.path.startswith(url) for url in self.exempt_urls):
+                return redirect(settings.LOGIN_URL)
+
+        response = self.get_response(request)
+        return response
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -51,6 +74,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "diaryWebsite.settings.LoginRequiredMiddleware",
 ]
 
 ROOT_URLCONF = "diaryWebsite.urls"
