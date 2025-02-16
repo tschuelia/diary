@@ -64,7 +64,7 @@ class VideoContentSetup {
           const videoHeight = Math.ceil(slide.height * slide.currZoomLevel);
           const verticalEnding = videoHeight + slide.bounds.center.y;
           const pointerYPos = origEvent.pageY - pswp.offset.y;
-          if (pointerYPos > verticalEnding - this.options.preventDragOffset 
+          if (pointerYPos > verticalEnding - this.options.preventDragOffset
               && pointerYPos < verticalEnding) {
             e.preventDefault();
           }
@@ -115,7 +115,7 @@ class VideoContentSetup {
         content.element.style.width = width + 'px';
         content.element.style.height = height + 'px';
       }
-  
+
       if (content.slide && content.slide.placeholder) {
         // override placeholder size, so it more accurately matches the video
         const placeholderElStyle = content.slide.placeholder.element.style;
@@ -193,7 +193,7 @@ class VideoContentSetup {
     content.element.style.position = 'absolute';
     content.element.style.left = 0;
     content.element.style.top = 0;
-    
+
     if (content.data.videoSources) {
       content.data.videoSources.forEach((source) => {
         let sourceEl = document.createElement('source');

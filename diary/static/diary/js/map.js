@@ -41,4 +41,3 @@ function initMap() {
         map.fitBounds(latlngbounds);
     }
 }
-

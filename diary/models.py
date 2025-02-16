@@ -69,13 +69,9 @@ class Image(models.Model):
         default="default.jpg",
         upload_to="entry_pics",
         verbose_name="Bilder",
-        validators=[FileExtensionValidator(IMAGE_EXTENSIONS + VIDEO_EXTENSIONS)]
+        validators=[FileExtensionValidator(IMAGE_EXTENSIONS + VIDEO_EXTENSIONS)],
     )
-    video_thumbnail = models.ImageField(
-        upload_to="entry_pics",
-        blank=True,
-        null=True
-    )
+    video_thumbnail = models.ImageField(upload_to="entry_pics", blank=True, null=True)
     is_image = models.BooleanField(default=True)
     entry = models.ForeignKey(
         Entry, related_name="image_of", on_delete=models.CASCADE, null=True

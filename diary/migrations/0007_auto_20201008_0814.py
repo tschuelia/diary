@@ -5,23 +5,45 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('diary', '0006_remove_entry_participants'),
+        ("diary", "0006_remove_entry_participants"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='entry',
-            name='summary',
-            field=models.TextField(blank=True, verbose_name='Zusammenfassung'),
+            model_name="entry",
+            name="summary",
+            field=models.TextField(blank=True, verbose_name="Zusammenfassung"),
         ),
         migrations.CreateModel(
-            name='Image',
+            name="Image",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(default='default.jpg', upload_to='entry_pics', verbose_name='Bilder')),
-                ('entry', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='image_of', to='diary.entry')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "image",
+                    models.ImageField(
+                        default="default.jpg",
+                        upload_to="entry_pics",
+                        verbose_name="Bilder",
+                    ),
+                ),
+                (
+                    "entry",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="image_of",
+                        to="diary.entry",
+                    ),
+                ),
             ],
         ),
     ]

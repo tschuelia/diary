@@ -4,27 +4,32 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('diary', '0008_auto_20201008_1702'),
+        ("diary", "0008_auto_20201008_1702"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='image',
-            name='height',
+            model_name="image",
+            name="height",
             field=models.IntegerField(default=0),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='image',
-            name='width',
+            model_name="image",
+            name="width",
             field=models.IntegerField(default=0),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='image',
-            name='image',
-            field=models.ImageField(default='default.jpg', height_field='height', upload_to='entry_pics', verbose_name='Bilder', width_field='width'),
+            model_name="image",
+            name="image",
+            field=models.ImageField(
+                default="default.jpg",
+                height_field="height",
+                upload_to="entry_pics",
+                verbose_name="Bilder",
+                width_field="width",
+            ),
         ),
     ]

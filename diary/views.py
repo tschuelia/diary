@@ -1,6 +1,5 @@
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.generic import DeleteView
@@ -14,7 +13,9 @@ from django.conf import settings
 def diaries_overview(request):
     diaries = get_diaries_for_user(request.user)
 
-    diaries_and_images = [(d, d.get_images().filter(is_image=True).order_by("?").first()) for d in diaries]
+    diaries_and_images = [
+        (d, d.get_images().filter(is_image=True).order_by("?").first()) for d in diaries
+    ]
     return render(
         request,
         "diary/diaries_overview.html",
@@ -27,7 +28,9 @@ def diaries_overview(request):
 def diary_detail(request, pk):
     diary = get_object_or_404(Diary, pk=pk)
     entries = diary.get_entries()
-    entries_and_images = [(e, e.get_images().filter(is_image=True).order_by("?").first()) for e in entries]
+    entries_and_images = [
+        (e, e.get_images().filter(is_image=True).order_by("?").first()) for e in entries
+    ]
     locations = [(e.location.x, e.location.y) for e in entries]
     labels = [e.title for e in entries]
     urls = [

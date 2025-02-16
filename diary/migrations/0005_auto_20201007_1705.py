@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('diary', '0004_diary_owner'),
+        ("diary", "0004_diary_owner"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='entry',
-            name='end_date',
-            field=models.DateField(blank=True, null=True, verbose_name='Enddatum'),
+            model_name="entry",
+            name="end_date",
+            field=models.DateField(blank=True, null=True, verbose_name="Enddatum"),
         ),
     ]

@@ -1,7 +1,7 @@
 /**
  * PhotoSwipe Dynamic Caption plugin v1.2.7
  * https://github.com/dimsemenov/photoswipe-dynamic-caption-plugin
- * 
+ *
  * By https://dimsemenov.com
  */
 
@@ -56,7 +56,7 @@ class PhotoSwipeDynamicCaption {
         } else {
           this.showCaption(slide);
         }
-  
+
         // move caption on vertical drag
         if (slide.dynamicCaption.element) {
           let captionYOffset = 0;
@@ -109,7 +109,7 @@ class PhotoSwipeDynamicCaption {
         return true;
       }
     }
-    
+
     return false;
   }
 
@@ -124,7 +124,7 @@ class PhotoSwipeDynamicCaption {
       slide.dynamicCaption.hidden = true;
       captionElement.classList.add('pswp__dynamic-caption--faded');
 
-      // Disable caption visibility with the delay, so it's not interactable 
+      // Disable caption visibility with the delay, so it's not interactable
       if (slide.captionFadeTimeout) {
         clearTimeout(slide.captionFadeTimeout);
       }
@@ -149,7 +149,7 @@ class PhotoSwipeDynamicCaption {
 
       slide.dynamicCaption.hidden = false;
       captionElement.style.visibility = 'visible';
-      
+
       clearTimeout(slide.captionFadeTimeout);
       slide.captionFadeTimeout = setTimeout(() => {
         captionElement.classList.remove('pswp__dynamic-caption--faded');
@@ -192,10 +192,10 @@ class PhotoSwipeDynamicCaption {
 
     if (slide.dynamicCaption.type === 'mobile') {
       this.setCaptionType(
-        slide.dynamicCaption.element, 
+        slide.dynamicCaption.element,
         slide.dynamicCaption.type
       );
-      
+
       slide.dynamicCaption.element.style.removeProperty('left');
       slide.dynamicCaption.element.style.removeProperty('top');
       this.setCaptionWidth(slide.dynamicCaption.element, false);
@@ -205,7 +205,7 @@ class PhotoSwipeDynamicCaption {
     const zoomLevel = slide.zoomLevels.initial;
     const imageWidth = Math.ceil(slide.width * zoomLevel);
     const imageHeight = Math.ceil(slide.height * zoomLevel);
-    
+
     this.setCaptionType(slide.dynamicCaption.element, slide.dynamicCaption.type);
     if (slide.dynamicCaption.type === 'aside') {
       this.setCaptionPosition(
@@ -246,7 +246,7 @@ class PhotoSwipeDynamicCaption {
       slide.dynamicCaption.element.className = 'pswp__dynamic-caption pswp__hide-on-close';
       slide.dynamicCaption.element.innerHTML = captionHTML;
 
-      this.pswp.dispatch('dynamicCaptionUpdateHTML', { 
+      this.pswp.dispatch('dynamicCaptionUpdateHTML', {
         captionElement: slide.dynamicCaption.element,
         slide
       });
@@ -261,7 +261,7 @@ class PhotoSwipeDynamicCaption {
     this.storeOriginalPanAreaSize(slide);
 
     slide.bounds.update(slide.zoomLevels.initial);
-    
+
     if (this.useMobileLayout()) {
       slide.dynamicCaption.type = 'mobile';
       useMobileVersion = true;
@@ -275,13 +275,13 @@ class PhotoSwipeDynamicCaption {
       } else {
         slide.dynamicCaption.type = this.options.type;
       }
-    } 
+    }
 
     const imageWidth = Math.ceil(slide.width * slide.zoomLevels.initial);
     const imageHeight = Math.ceil(slide.height * slide.zoomLevels.initial);
 
     this.setCaptionType(
-      slide.dynamicCaption.element, 
+      slide.dynamicCaption.element,
       slide.dynamicCaption.type
     );
 
@@ -289,7 +289,7 @@ class PhotoSwipeDynamicCaption {
       this.setCaptionWidth(slide.dynamicCaption.element, false);
       captionSize = this.measureCaptionSize(slide.dynamicCaption.element, e.slide);
 
-      const captionWidth = captionSize.x;      
+      const captionWidth = captionSize.x;
 
       const horizontalEnding = imageWidth + slide.bounds.center.x;
       const horizontalLeftover = (slide.panAreaSize.x - horizontalEnding);
@@ -302,7 +302,7 @@ class PhotoSwipeDynamicCaption {
       }
     } else if (slide.dynamicCaption.type === 'below' || useMobileVersion) {
       this.setCaptionWidth(
-        slide.dynamicCaption.element, 
+        slide.dynamicCaption.element,
         useMobileVersion ? this.pswp.viewportSize.x : imageWidth
       );
 
@@ -319,7 +319,7 @@ class PhotoSwipeDynamicCaption {
         const verticalEnding = imageHeight + slide.bounds.center.y;
 
         // height between bottom of the screen and ending of the image
-        // (before any adjustments applied) 
+        // (before any adjustments applied)
         const verticalLeftover = slide.panAreaSize.y - verticalEnding;
         const initialPanAreaHeight = slide.panAreaSize.y;
 
@@ -333,7 +333,7 @@ class PhotoSwipeDynamicCaption {
           const maxPositionX = slide.panAreaSize.x * this.options.mobileCaptionOverlapRatio / 2;
 
           // Do not reduce viewport height if too few space available
-          if (useMobileVersion 
+          if (useMobileVersion
               && slide.bounds.center.x > maxPositionX) {
             // Restore the default position
             slide.panAreaSize.y = initialPanAreaHeight;

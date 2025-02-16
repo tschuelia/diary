@@ -1,3 +1,5 @@
+diaryWebsite/settings.py
+
 # ignore media folder
 media/*
 # ignore compiled static files

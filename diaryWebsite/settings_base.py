@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
+
 from PIL import Image
 import os
 
@@ -35,6 +36,7 @@ class LoginRequiredMiddleware:
         response = self.get_response(request)
         return response
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -60,7 +62,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "sorl.thumbnail",
-    'django_extensions',
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -94,7 +96,7 @@ TEMPLATES = [
 ]
 
 FILE_UPLOAD_HANDLERS = [
-    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
 ]
 
 WSGI_APPLICATION = "diaryWebsite.wsgi.application"
@@ -148,17 +150,17 @@ MAP_WIDGETS = {
                 "mapOptions": {
                     "zoom": 15,
                     "markerFitZoom": 11,
-                    "streetViewControl": True
+                    "streetViewControl": True,
                 },
-                "GooglePlaceAutocompleteOptions": {
-                    "componentRestrictions": {}
-                },
-                "mapCenterLocationName": "frankfurt"
+                "GooglePlaceAutocompleteOptions": {"componentRestrictions": {}},
+                "mapCenterLocationName": "frankfurt",
             },
         },
     },
 }
 
 # The Django FileExtensionValidator matches without the dot...
-IMAGE_EXTENSIONS = [ex[1:] for ex, f in Image.registered_extensions().items() if f in Image.OPEN]
+IMAGE_EXTENSIONS = [
+    ex[1:] for ex, f in Image.registered_extensions().items() if f in Image.OPEN
+]
 VIDEO_EXTENSIONS = ["mp4", "mov"]

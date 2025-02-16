@@ -37,4 +37,5 @@ class EntryAdmin(admin.ModelAdmin):
         "participants",
     ]
 
+
 admin.site.register(Image)

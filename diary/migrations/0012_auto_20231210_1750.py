@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('diary', '0011_file'),
+        ("diary", "0011_file"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='image',
-            name='is_image',
+            model_name="image",
+            name="is_image",
             field=models.BooleanField(default=True),
         ),
         migrations.AlterField(
-            model_name='image',
-            name='description',
-            field=models.TextField(blank=True, verbose_name='Beschreibung'),
+            model_name="image",
+            name="description",
+            field=models.TextField(blank=True, verbose_name="Beschreibung"),
         ),
     ]

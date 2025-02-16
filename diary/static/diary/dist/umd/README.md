@@ -14,7 +14,7 @@ Basic example:
 
     <script src="./photoswipe.umd.min.js"></script>
     <script src="./photoswipe-lightbox.umd.min.js"></script>
-    
+
     <link rel="stylesheet" href="../photoswipe.css">
 
     <div class="test-gallery">
@@ -28,13 +28,13 @@ Basic example:
         <img src="https://dummyimage.com/30x60/000/fff" alt="" />
       </a>
     </div>
-    
+
     <script type="text/javascript">
       var lightbox = new PhotoSwipeLightbox({
         gallery: '.test-gallery',
         children: 'a',
         // dynamic import is not supported in UMD version
-        pswpModule: PhotoSwipe 
+        pswpModule: PhotoSwipe
       });
       lightbox.init();
     </script>

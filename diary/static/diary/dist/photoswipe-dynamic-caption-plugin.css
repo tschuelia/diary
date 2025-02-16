@@ -47,6 +47,6 @@
 
   /* override styles that were set via JS.
     as they interfere with size measurement */
-  top: auto !important; 
+  top: auto !important;
   left: 0 !important;
 }

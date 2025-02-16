@@ -11,7 +11,11 @@ from io import BytesIO
 
 def _image_exif_data(pil_image):
     if pil_image._getexif():
-        return {PIL.ExifTags.TAGS[k]: v for k, v in pil_image._getexif().items() if k in PIL.ExifTags.TAGS}
+        return {
+            PIL.ExifTags.TAGS[k]: v
+            for k, v in pil_image._getexif().items()
+            if k in PIL.ExifTags.TAGS
+        }
 
 
 def get_image_date_and_dimensions(image):
@@ -27,9 +31,15 @@ def get_image_date_and_dimensions(image):
     if exif and "DateTimeOriginal" in exif.keys():
         dtorig = exif["DateTimeOriginal"]
         # DateTimeOriginal is of format "2019:01:11 11:08:47"
-        creation_time = datetime.datetime.strptime(dtorig, "%Y:%m:%d %H:%M:%S").astimezone(datetime.timezone.utc)
+        creation_time = datetime.datetime.strptime(
+            dtorig, "%Y:%m:%d %H:%M:%S"
+        ).astimezone(datetime.timezone.utc)
 
-    if exif and "Orientation" in exif.keys() and (exif["Orientation"] == 6 or exif["Orientation"] == 8):
+    if (
+        exif
+        and "Orientation" in exif.keys()
+        and (exif["Orientation"] == 6 or exif["Orientation"] == 8)
+    ):
         # (height, width)
         height, width = pil_image.size[0], pil_image.size[1]
 
@@ -52,12 +62,16 @@ def get_video_date_and_dimensions(video_path):
 
     # For MOV iPhone videos, the correct time stamp is encoded in
     # data["format"]["tags"]["com.apple.quicktime.creationdate"]
-    apple_creation_time = data.get("format", {}).get("tags", {}).get("com.apple.quicktime.creationdate")
+    apple_creation_time = (
+        data.get("format", {}).get("tags", {}).get("com.apple.quicktime.creationdate")
+    )
     if apple_creation_time:
         creation_time = apple_creation_time
 
     if creation_time:
-        creation_time = datetime.datetime.fromisoformat(creation_time).astimezone(datetime.timezone.utc)
+        creation_time = datetime.datetime.fromisoformat(creation_time).astimezone(
+            datetime.timezone.utc
+        )
 
     return creation_time, width, height
 
@@ -71,4 +85,6 @@ def get_video_thumbnail(video_path):
     tmp_file = BytesIO()
     pil_image.save(tmp_file, format="JPEG")
     tmp_file = ContentFile(tmp_file.getvalue())
-    return InMemoryUploadedFile(tmp_file, None, "tmp_file.jpg", "image/jpeg", tmp_file.tell, None)
+    return InMemoryUploadedFile(
+        tmp_file, None, "tmp_file.jpg", "image/jpeg", tmp_file.tell, None
+    )
