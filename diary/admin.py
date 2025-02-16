@@ -33,6 +33,7 @@ class EntryAdmin(admin.ModelAdmin):
         "start_date",
         "end_date",
         "location",
+        "summary",
         "description",
     ]
 
