@@ -1,12 +1,10 @@
-Django<4
+Django
 pillow
 opencv-python
 django-crispy-forms<2
 django-fontawesome-5
-django-activeurl
 django-pagedown
 django-markdown-deux
-django-bootstrap-datepicker-plus
 whitenoise<6
 gunicorn
 dj_static

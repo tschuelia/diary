@@ -3,14 +3,17 @@ import pathlib
 from django import forms
 from django.forms import inlineformset_factory
 
-from bootstrap_datepicker_plus.widgets import DatePickerInput
 from pagedown.widgets import PagedownWidget
-from mapwidgets.widgets import GooglePointFieldWidget
+from mapwidgets.widgets import GoogleMapPointFieldWidget
 
 from .models import Diary, Entry, Image, File
 from .utils import get_image_date_and_dimensions, get_video_date_and_dimensions, get_video_thumbnail
 
 from diaryWebsite.settings_base import IMAGE_EXTENSIONS, VIDEO_EXTENSIONS
+
+
+class DateInput(forms.DateInput):
+    input_type = "date"
 
 
 class DiaryForm(forms.ModelForm):
@@ -20,9 +23,9 @@ class DiaryForm(forms.ModelForm):
         model = Diary
         exclude = ("owner",)
         widgets = {
-            "location": GooglePointFieldWidget,
-            "start_date": DatePickerInput(format="%Y-%m-%d"),
-            "end_date": DatePickerInput(format="%Y-%m-%d"),
+            "location": GoogleMapPointFieldWidget,
+            "start_date": DateInput(format=("%Y-%m-%d")),
+            "end_date": DateInput(format=("%Y-%m-%d"))
         }
 
 
@@ -41,9 +44,9 @@ class EntryForm(forms.ModelForm):
             "description",
         ]
         widgets = {
-            "location": GooglePointFieldWidget,
-            "start_date": DatePickerInput(format="%Y-%m-%d"),
-            "end_date": DatePickerInput(format="%Y-%m-%d"),
+            "location": GoogleMapPointFieldWidget,
+            "start_date": DateInput(format=("%Y-%m-%d")),
+            "end_date": DateInput(format=("%Y-%m-%d")),
         }
 
 

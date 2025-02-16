@@ -5,12 +5,12 @@ from django.contrib.gis.db import models
 from .models import Diary, Entry, Image
 from .forms import DiaryForm, EntryForm
 
-from mapwidgets.widgets import GooglePointFieldWidget
+from mapwidgets.widgets import GoogleMapPointFieldWidget
 
 
 @admin.register(Diary)
 class DiaryAdmin(admin.ModelAdmin):
-    formfield_overrides = {models.PointField: {"widget": GooglePointFieldWidget}}
+    formfield_overrides = {models.PointField: {"widget": GoogleMapPointFieldWidget}}
     form = DiaryForm
     fields = [
         "title",
@@ -25,7 +25,7 @@ class DiaryAdmin(admin.ModelAdmin):
 
 @admin.register(Entry)
 class EntryAdmin(admin.ModelAdmin):
-    formfield_overrides = {models.PointField: {"widget": GooglePointFieldWidget}}
+    formfield_overrides = {models.PointField: {"widget": GoogleMapPointFieldWidget}}
     form = EntryForm
     fields = [
         "diary",

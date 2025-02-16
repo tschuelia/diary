@@ -48,10 +48,8 @@ INSTALLED_APPS = [
     "diary.apps.DiaryConfig",
     "pagedown.apps.PagedownConfig",
     "markdown_deux",
-    "django_activeurl",
     "fontawesome_5",
     "mapwidgets",
-    "bootstrap_datepicker_plus",
     "crispy_forms",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -144,15 +142,21 @@ MEDIA_URL = "/media/"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MAP_WIDGETS = {
-    "GooglePointFieldWidget": (
-        ("zoom", 15),
-        ("mapCenterLocation", [53.0, 9.0]),
-        ("markerFitZoom", 11),
-        (
-            "GooglePlaceAutocompleteOptions",
-            {"componentRestrictions": {}},
-        ),
-    )
+    "GoogleMap": {
+        "PointField": {
+            "interactive": {
+                "mapOptions": {
+                    "zoom": 15,
+                    "markerFitZoom": 11,
+                    "streetViewControl": True
+                },
+                "GooglePlaceAutocompleteOptions": {
+                    "componentRestrictions": {}
+                },
+                "mapCenterLocationName": "frankfurt"
+            },
+        },
+    },
 }
 
 # The Django FileExtensionValidator matches without the dot...
