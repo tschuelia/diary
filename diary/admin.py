@@ -34,7 +34,6 @@ class EntryAdmin(admin.ModelAdmin):
         "end_date",
         "location",
         "description",
-        "participants",
     ]
 
 
